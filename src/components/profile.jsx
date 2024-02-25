@@ -19,7 +19,7 @@ const Profile = () => {
   useEffect(() => {
     // Fetch current user profile data and set the form
     const fetchProfileData = async () => {
-      const res = await axios.get(`http://localhost:5000/api/profile/fetch/${id}`);
+      const res = await axios.get(`https://nami-backend.onrender.com/api/profile/fetch/${id}`);
       setFormData(res.data);
     };
 
@@ -36,7 +36,7 @@ const Profile = () => {
     console.log('submitted')//comment
     try {
       // Update user profile
-      await axios.put(`http://localhost:5000/api/profile/update/${id}`, formData);
+      await axios.put(`https://nami-backend.onrender.com/api/profile/update/${id}`, formData);
 
       // Show success message
       alert("Profile Update Successful");
@@ -56,7 +56,7 @@ const Profile = () => {
   const handleDeleteProfile = async () => {
     try {
       // Make a DELETE request to the delete profile API endpoint
-      await axios.delete(`http://localhost:5000/api/user/delete/${id}`);
+      await axios.delete(`https://nami-backend.onrender.com/api/user/delete/${id}`);
 
       // Show success message
       alert('Profile Deleted Successfully');
@@ -79,7 +79,7 @@ const Profile = () => {
     }
   
     try {
-      await axios.delete(`http://localhost:5000/api/user/delete/${id}`, {
+      await axios.delete(`https://nami-backend.onrender.com/api/user/delete/${id}`, {
         data: { password: userPassword },
       });
   

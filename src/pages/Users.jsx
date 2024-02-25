@@ -16,7 +16,7 @@ export default function Users() {
   const handleFetch = async () => {
     const config = {
       method: "GET",
-      url: "http://localhost:5000/api/user/fetch",
+      url: "https://nami-backend.onrender.com/api/user/fetch",
     };
     const response = await axios(config);
     setUsers(response?.data);

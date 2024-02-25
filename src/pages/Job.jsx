@@ -65,7 +65,7 @@ export default function Job() {
   const[isWeeklyHoursValid, setIsWeeklyHoursValid] = useState(false);
 
   const handleFetch = async () => {
-    const response = await axios.get("http://localhost:5000/api/job/fetch");
+    const response = await axios.get("https://nami-backend.onrender.com/api/job/fetch");
     setJobs(response.data);
   };
 
@@ -152,10 +152,10 @@ export default function Job() {
 
       // BUG: Number type fields set null - Can't set a previously filled number value to nothing
       if(editJobData) {
-        await axios.put(`http://localhost:5000/api/job/update/${currentEditId}`, jobData);
+        await axios.put(`https://nami-backend.onrender.com/api/job/update/${currentEditId}`, jobData);
         setCurrentEditId(null);
       } else {
-        await axios.post("http://localhost:5000/api/job/create", jobData);
+        await axios.post("https://nami-backend.onrender.com/api/job/create", jobData);
       }
       setReload(!reload);
       setShowAddForm(false); // Close the form after submitting
@@ -260,7 +260,7 @@ export default function Job() {
 
   const handleConfirmDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/job/delete/${deletingJob._id}`);
+      await axios.delete(`https://nami-backend.onrender.com/api/job/delete/${deletingJob._id}`);
       setReload(!reload);
     } catch (error) {
       console.error('Error deleting job:', error);

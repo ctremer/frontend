@@ -21,7 +21,7 @@ const Employment = () => {
     // Fetch current user employment data and set the form
     const fetchEmploymentData = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/profile/fetch/${id}`);
+        const res = await axios.get(`https://nami-backend.onrender.com/api/profile/fetch/${id}`);
         setFormData(res.data);
       } catch (error) {
         console.error('Error fetching employment data:', error);
