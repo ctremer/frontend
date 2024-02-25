@@ -7,6 +7,7 @@ const navbar = [
   { title: "Manage Jobs", url: "job" },
   { title: "Manage Scholarships", url: "scholarship" },
   { title: "Users", url: "users" },
+  { title: "Add New Admin", url: "create-admin"}
 ];
 
 export default function Users() {
@@ -15,7 +16,7 @@ export default function Users() {
   const handleFetch = async () => {
     const config = {
       method: "GET",
-      url: "/api/user/fetch",
+      url: "http://localhost:5000/api/user/fetch",
     };
     const response = await axios(config);
     setUsers(response?.data);

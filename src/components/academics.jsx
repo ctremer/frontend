@@ -6,7 +6,15 @@ import { Link } from 'react-router-dom';
 // Define the functional component for the form
 function Academic() {   
     const submit = () => {
-        // Add your logic to handle form submission here
+        // Access the form data
+        const formData = FormData(document.querySelector('form'));
+
+        // Convert formData to a JSON object
+        const formObject = {};
+        formData.forEach((value, key) => {
+            formObject[key] = value;
+        });
+        
         console.log('Form submitted!');
     };
 
@@ -31,10 +39,6 @@ function Academic() {
                 <label htmlFor="GPA">GPA:</label>
                 <input type="number" id="GPA" name="GPA" step="0.01" required />
 
-
-                <label htmlFor="startDate">Start Date:</label>
-                <input type="text" id="startDate" name="startDate" placeholder="MM/DD/YYYY" required />
-
                 <label htmlFor="minor">Minor (if any):</label>
                 <input type="text" id="minor" name="minor" />
 
@@ -55,8 +59,8 @@ function Academic() {
                         </option>
                     ))}
                 </select>
-                <Link to="/admin-dashboard">
-                <button type="button" onClick={submit}>Enter</button>
+                <Link to="/profile">
+                <button type="button" onClick={submit}>Submit</button>
                 </Link>
             </form>
         </div>

@@ -1,6 +1,9 @@
 // components/registrationform.js
 
+import React, { useState, useEffect } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
@@ -8,11 +11,13 @@ const RegistrationForm = () => {
     lastName: '',
     email: '',
     password: '',
-    bio: '',
-    academicHistory: '',
-    employmentHistory: '',
-    skills: '',
+    bio: ''
   });
+
+  const navigate=useNavigate();
+  const id = localStorage.getItem('_id');
+  console.log('user_id', id)
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -47,19 +52,6 @@ const RegistrationForm = () => {
 
       <label>Password:</label>
       <input type="password" name="password" value={formData.password} onChange={handleChange} />
-
-      <label>Bio:</label>
-      <textarea name="bio" value={formData.bio} onChange={handleChange} />
-
-      <label>Academic History:</label>
-      <textarea name="academicHistory" value={formData.academicHistory} onChange={handleChange} />
-
-      <label>Employment History:</label>
-      <textarea name="employmentHistory" value={formData.employmentHistory} onChange={handleChange} />
-
-      <label>Skills:</label>
-      <input type="text" name="skills" value={formData.skills} onChange={handleChange} />
-
 
       <button type="submit">Register</button>
     </form>

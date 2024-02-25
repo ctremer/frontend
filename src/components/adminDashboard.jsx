@@ -135,6 +135,8 @@ const AdminDashboard = () => {
         <h2>Profile</h2>
         <p>Profile section.</p>
       </div>
+
+      
     </div>
   );
 };

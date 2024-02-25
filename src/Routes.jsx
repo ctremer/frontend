@@ -18,6 +18,11 @@ import Users from "./pages/Users";
 import UserJobs from "./components/UserDashbaord/jobs.jsx";
 import UserScholarship from "./components/UserDashbaord/scholarships.jsx";
 import UserDashboardHome from "./components/UserDashbaord/dashboard.jsx";
+import PersonalInfo from "./components/registrationform.jsx";
+import AcademicExperience from "./components/academics.jsx";
+import EmploymentHistory from "./components/employment.jsx";
+import CreateAdmin from "./components/createAdmin.jsx";
+import ResetPassword from "./components/resetPassword.jsx";
 
 const Routes = () => {
   return (
@@ -33,9 +38,14 @@ const Routes = () => {
         <Route path="/users" element={<Users />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/personal-info" element={<PersonalInfo />} />
+        <Route path="profile/academics-experience" element={<AcademicExperience />} />
+        <Route path="profile/employment-history" element={<EmploymentHistory />} />
         <Route path = "/userJobs" element={<UserJobs />} />
         <Route path = "/userScholarships" element = {<UserScholarship />} />
         <Route path = "/user-dashboard-home" element = {<UserDashboardHome />} />
+        <Route path = "/create-admin" element = {<CreateAdmin/>} />
+        <Route path = "/reset-password" element = {<ResetPassword />} />
       </ReactRoutes>
     </Router>
   );
