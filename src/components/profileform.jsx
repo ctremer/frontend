@@ -13,7 +13,7 @@ const ProfileForm = () => {
   useEffect(() => {
     // Fetch current user profile data and set the form
     const fetchProfileData = async () => {
-      const res = await axios.get('https://nami-backend.onrender.com/api/profile');
+      const res = await axios.get('/api/profile');
       setFormData(res.data);
     };
 
