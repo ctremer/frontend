@@ -40,7 +40,7 @@ const JobApply = () => {
         };
         updatedJob.submittedapplications.push(application);
         try {
-          await axios.put(`http://localhost:5000/api/job/update/${job._id}`, updatedJob);
+          await axios.put(`https://edoponline.netlify.app/api/job/update/${job._id}`, updatedJob);
         } catch (error) {
           console.error("Error saving user application to job document", error);
         }
@@ -51,10 +51,10 @@ const JobApply = () => {
           essay2: formData.whyFit
         };
         try {
-          const res = await axios.get(`http://localhost:5000/api/profile/fetch/${userID}`);
+          const res = await axios.get(`https://edoponline.netlify.app/api/profile/fetch/${userID}`);
           const updatedProfile = { ...res.data };
           updatedProfile.submittedjobapplications.push(application2);
-          await axios.put(`http://localhost:5000/api/profile/update/${userID}`, updatedProfile);
+          await axios.put(`https://edoponline.netlify.app/api/profile/update/${userID}`, updatedProfile);
         } catch (error) {
           console.error("Error saving job application to user profile document", error);
         }

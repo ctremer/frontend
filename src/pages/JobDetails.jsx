@@ -33,7 +33,7 @@ export default function JobDetails() {
     
     // Fetch all jobs
     const handleFetch = async () => {
-        const response = await axios.get("http://localhost:5000/api/job/fetch");
+        const response = await axios.get("https://edoponline.netlify.app/api/job/fetch");
         setJobs(response.data);
     };
 

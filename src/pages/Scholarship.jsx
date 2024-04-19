@@ -55,7 +55,7 @@ export default function Scholarship() {
   const [isAwardsAvailValid, setIsAwardsAvailValid] = useState(false);
 
   const handleFetch = async () => {
-    const response = await axios("http://localhost:5000/api/scholarship/fetch");
+    const response = await axios("https://edoponline.netlify.app/api/scholarship/fetch");
     setScholarships(response?.data);
   };
 
@@ -126,10 +126,10 @@ export default function Scholarship() {
       scholarshipData.deadline = formatDate(scholarshipData.deadline)
 
       if(editScholarshipData) {
-        await axios.put(`http://localhost:5000/api/scholarship/update/${currentEditId}`, scholarshipData);
+        await axios.put(`https://edoponline.netlify.app/api/scholarship/update/${currentEditId}`, scholarshipData);
         setCurrentEditId(null);
       } else {
-        await axios.post("http://localhost:5000/api/scholarship/create", scholarshipData);
+        await axios.post("https://edoponline.netlify.app/api/scholarship/create", scholarshipData);
       }
       setReload(!reload);
       setShowAddForm(false);
@@ -165,7 +165,7 @@ export default function Scholarship() {
 
   const handleConfirmDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/scholarship/delete/${deletingScholarship._id}`);
+      await axios.delete(`https://edoponline.netlify.app/api/scholarship/delete/${deletingScholarship._id}`);
       setReload(!reload);
     } catch (error) {
       console.error('Error deleting scholarship:', error);

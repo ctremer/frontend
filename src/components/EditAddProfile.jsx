@@ -34,9 +34,9 @@ const EditAddProfile = () => {
     e.preventDefault();
     try {
       if (location.state && location.state.formData) {
-        await axios.put(`http://localhost:5000/api/profile/update/${formData.id}`, formData);
+        await axios.put(`https://edoponline.netlify.app/api/profile/update/${formData.id}`, formData);
       } else {
-        await axios.post(`http://localhost:5000/api/profile/create`, formData);
+        await axios.post(`https://edoponline.netlify.app/api/profile/create`, formData);
       }
       // Redirect or perform other actions after successful submission
     } catch (error) {

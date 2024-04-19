@@ -42,7 +42,7 @@ const Profile = () => {
     const fetchProfileData = async () => {
       try {
         const userId = localStorage.getItem('_id');
-        const res = await axios.get(`http://localhost:5000/api/profile/fetch/${userId}`);
+        const res = await axios.get(`https://edoponline.netlify.app/api/profile/fetch/${userId}`);
         setProfile(res.data);
       } catch (error) {
         console.error('Error fetching profile data:', error);
@@ -59,7 +59,7 @@ const Profile = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:5000/api/user/delete/${id}`, {
+      await axios.delete(`https://edoponline.netlify.app/api/user/delete/${id}`, {
         data: { password: userPassword },
       });
 
@@ -111,7 +111,7 @@ const Profile = () => {
     const fileURL = 'https://nami-ep-od-profile-photos.s3.us-east-2.amazonaws.com/' + file.name;
     try {
       const updatedProfile = { ...profile, profilepicture: fileURL};
-      await axios.put(`http://localhost:5000/api/profile/update/${id}`, updatedProfile);
+      await axios.put(`https://edoponline.netlify.app/api/profile/update/${id}`, updatedProfile);
       setProfile(updatedProfile);
     } catch (error) {
       console.error("Error saving profile picture", error);
@@ -137,7 +137,7 @@ const Profile = () => {
 
   const handleSaveBio = async () => {
       profile.bio = editedBio;
-      await axios.put(`http://localhost:5000/api/profile/update/${id}`, profile);
+      await axios.put(`https://edoponline.netlify.app/api/profile/update/${id}`, profile);
       setBioEditMode(false);
   }
 
@@ -145,7 +145,7 @@ const Profile = () => {
     try {
       const updatedProfile = { ...profile, bio: editedBio };
       updatedProfile[editedField][editedIndex] = editedValue;
-      await axios.put(`http://localhost:5000/api/profile/update/${id}`, updatedProfile);
+      await axios.put(`https://edoponline.netlify.app/api/profile/update/${id}`, updatedProfile);
       setProfile(updatedProfile);
       setEditMode(false);
     } catch (error) {
@@ -164,7 +164,7 @@ const Profile = () => {
       try {
         const updatedProfile = { ...profile };
         updatedProfile[field].splice(index, 1);
-        await axios.put(`http://localhost:5000/api/profile/update/${id}`, updatedProfile);
+        await axios.put(`https://edoponline.netlify.app/api/profile/update/${id}`, updatedProfile);
         setProfile(updatedProfile);
       } catch (error) {
         console.error('Error deleting entry:', error);
@@ -181,7 +181,7 @@ const Profile = () => {
       if (newAcademicHistory != "") {
         const updatedProfile = { ...profile };
         updatedProfile.academicHistory.push(newAcademicHistory.replace(/\n/g, '<br>'));
-      await axios.put(`http://localhost:5000/api/profile/update/${id}`, updatedProfile);
+      await axios.put(`https://edoponline.netlify.app/api/profile/update/${id}`, updatedProfile);
       setProfile(updatedProfile);
       setShowAddAcademicHistory(false);
       setNewAcademicHistory('');
@@ -207,7 +207,7 @@ const Profile = () => {
       if (newEmploymentHistory != "") {
         const updatedProfile = { ...profile };
         updatedProfile.employmentHistory.push(newEmploymentHistory.replace(/\n/g, '<br>'));
-      await axios.put(`http://localhost:5000/api/profile/update/${id}`, updatedProfile);
+      await axios.put(`https://edoponline.netlify.app/api/profile/update/${id}`, updatedProfile);
       setProfile(updatedProfile);
       setShowAddEmploymentHistory(false);
       setNewEmploymentHistory('');
@@ -233,7 +233,7 @@ const Profile = () => {
       if (newSkill != "") {
         const updatedProfile = { ...profile };
         updatedProfile.skills.push(newSkill.replace(/\n/g, '<br>'));
-      await axios.put(`http://localhost:5000/api/profile/update/${id}`, updatedProfile);
+      await axios.put(`https://edoponline.netlify.app/api/profile/update/${id}`, updatedProfile);
       setProfile(updatedProfile);
       setShowAddSkills(false);
       setNewSkill('');

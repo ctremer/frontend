@@ -12,7 +12,7 @@ export default function Users() {
   const [users, setUsers] = useState([]);
   const handleFetch = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/user/fetch");
+      const response = await axios.get("https://edoponline.netlify.app/api/user/fetch");
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -23,7 +23,7 @@ export default function Users() {
   }, []);
   const handleDelete = async (userId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/user/adminDelete/${userId}`);
+      await axios.delete(`https://edoponline.netlify.app/api/user/adminDelete/${userId}`);
       // After successful deletion, fetch users again to update the list
       handleFetch();
     } catch (error) {

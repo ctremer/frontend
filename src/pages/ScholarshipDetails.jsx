@@ -34,7 +34,7 @@ export default function JobDetails() {
     
     // Fetch all jobs
     const handleFetch = async () => {
-        const response = await axios.get("http://localhost:5000/api/scholarship/fetch");
+        const response = await axios.get("https://edoponline.netlify.app/api/scholarship/fetch");
         setSchols(response.data);
     };
 

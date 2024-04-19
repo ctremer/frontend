@@ -17,7 +17,7 @@ const RegistrationForm = () => {
     // Fetch current user academic data and set the form
     const fetchPersonalInfo = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/Profile/fetch/${id}`);
+        const res = await axios.get(`https://edoponline.netlify.app/api/Profile/fetch/${id}`);
         setFormData(res.data);
       } catch (error) {
         console.error('Error fetching academic data:', error);
@@ -36,7 +36,7 @@ const RegistrationForm = () => {
 
     try {
       // Send the registration data to the server
-      const response = await axios.put(`http://localhost:5000/api/Profile/update/${id}`, formData);
+      const response = await axios.put(`https://edoponline.netlify.app/api/Profile/update/${id}`, formData);
 
       // Handle the response, e.g., show a success message
       console.log('Personal Information Successfully Updated', response.data);
