@@ -16,7 +16,7 @@ const CreateAdmin = () => {
 
   const handleCreate = async () => {
     try {
-      const response = await fetch('https://edoponline.netlify.app/api/admin-signup', {
+      const response = await fetch('https://nami-backend.onrender.com/api/admin-signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ const CreateAdmin = () => {
 
   const handleVerification = async () => {
     try {
-      const response = await fetch('https://edoponline.netlify.app/api/admin-verify', {
+      const response = await fetch('https://nami-backend.onrender.com/api/admin-verify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

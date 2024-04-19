@@ -27,13 +27,13 @@ const AdminDashboard = () => {
 
   // Fetch scholarships data from the API
   const fetchScholarships = async () => {
-    const response = await axios("https://edoponline.netlify.app/api/scholarship/fetch");
+    const response = await axios("https://nami-backend.onrender.com/api/scholarship/fetch");
     setScholarships(response?.data);
     setDisplayedScholarships(response?.data.slice(0, 3));
   };
 
   const fetchJobs = async () => {
-    const response = await axios.get("https://edoponline.netlify.app/api/job/fetch");
+    const response = await axios.get("https://nami-backend.onrender.com/api/job/fetch");
     setJobs(response.data);
     setDisplayedJobs(response.data.slice(0, 3));
   };

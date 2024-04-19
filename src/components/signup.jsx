@@ -12,7 +12,7 @@ const Signup = () => {
 
   const handleSignup = async () => {
     try {
-      const response = await fetch('https://edoponline.netlify.app/api/signup', {
+      const response = await fetch('https://nami-backend.onrender.com/api/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

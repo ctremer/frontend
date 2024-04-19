@@ -19,16 +19,16 @@ const ScholarshipEssay = () => {
         const updatedSchol = { ...schol };
         updatedSchol.submittedessays.push(userID+"\n"+formData); // entries first line is id of user who submitted
         try {
-          await axios.put(`https://edoponline.netlify.app/api/scholarship/update/${schol._id}`, updatedSchol);
+          await axios.put(`https://nami-backend.onrender.com/api/scholarship/update/${schol._id}`, updatedSchol);
         } catch (error) {
           console.error("Error saving scholarship essay to scholarship document", error);
         }
 
         try {
-          const res = await axios.get(`https://edoponline.netlify.app/api/profile/fetch/${userID}`);
+          const res = await axios.get(`https://nami-backend.onrender.com/api/profile/fetch/${userID}`);
           const updatedProfile = { ...res.data };
           updatedProfile.submittedessays.push(schol._id+"\n"+formData); // entries first line is id of scholarship submitted to
-          await axios.put(`https://edoponline.netlify.app/api/profile/update/${userID}`, updatedProfile);
+          await axios.put(`https://nami-backend.onrender.com/api/profile/update/${userID}`, updatedProfile);
         } catch (error) {
           console.error("Error saving scholarship essay to user profile document", error);
         }

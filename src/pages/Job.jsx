@@ -76,7 +76,7 @@ export default function Job() {
   const[readyToSubmit, setReadyToSubmit] = useState(true);
 
   const handleFetch = async () => {
-    const response = await axios.get("https://edoponline.netlify.app/api/job/fetch");
+    const response = await axios.get("https://nami-backend.onrender.com/api/job/fetch");
     setJobs(response.data);
   };
 
@@ -193,11 +193,11 @@ export default function Job() {
           }
           console.log(jobData)
           console.log("updating")
-            await axios.put(`https://edoponline.netlify.app/api/job/update/${currentEditId}`, jobData);
+            await axios.put(`https://nami-backend.onrender.com/api/job/update/${currentEditId}`, jobData);
             setCurrentEditId(null);
             setEditJobData("")
         } else {
-            await axios.post("https://edoponline.netlify.app/api/job/create", jobData);
+            await axios.post("https://nami-backend.onrender.com/api/job/create", jobData);
         }
 
         // Clear the form fields
@@ -326,7 +326,7 @@ export default function Job() {
 
   const handleConfirmDelete = async () => {
     try {
-      await axios.delete(`https://edoponline.netlify.app/api/job/delete/${deletingJob._id}`);
+      await axios.delete(`https://nami-backend.onrender.com/api/job/delete/${deletingJob._id}`);
       setReload(!reload);
     } catch (error) {
       console.error('Error deleting job:', error);

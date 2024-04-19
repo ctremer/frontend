@@ -21,7 +21,7 @@ const Employment = () => {
     // Fetch current user employment data and set the form
     const fetchEmploymentData = async () => {
       try {
-        const res = await axios.get(`https://edoponline.netlify.app/api/profile/fetch/${id}`);
+        const res = await axios.get(`https://nami-backend.onrender.com/api/profile/fetch/${id}`);
         setFormData(res.data);
       } catch (error) {
         console.error('Error fetching employment data:', error);
@@ -40,7 +40,7 @@ const Employment = () => {
     
     try {
       // Update user employment
-      await axios.put(`https://edoponline.netlify.app/api/profile/update/${id}`, formData);
+      await axios.put(`https://nami-backend.onrender.com/api/profile/update/${id}`, formData);
 
       navigate('/user-dashboard');
     } catch (error) {

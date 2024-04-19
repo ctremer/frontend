@@ -22,7 +22,7 @@ const ScholarshipsPage = () => {
   useEffect(() => {
     const fetchScholarships = async () => {
       try {
-        const response = await axios.get('https://edoponline.netlify.app/api/scholarship/fetch');
+        const response = await axios.get('https://nami-backend.onrender.com/api/scholarship/fetch');
         setScholarships(response.data);
       } catch (error) {
         console.error('Error fetching scholarships:', error);

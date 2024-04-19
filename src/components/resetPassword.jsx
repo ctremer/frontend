@@ -13,7 +13,7 @@ const ResetPassword = () => {
   const handleResetPassword = async () => {
     try {
   
-      const response = await fetch(`https://edoponline.netlify.app/api/user/edit/${id}`, {
+      const response = await fetch(`https://nami-backend.onrender.com/api/user/edit/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

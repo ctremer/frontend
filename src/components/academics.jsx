@@ -23,7 +23,7 @@ const Academic = () => {
     // Fetch current user academic data and set the form
     const fetchAcademicData = async () => {
       try {
-        const res = await axios.get(`https://edoponline.netlify.app/api/Profile/fetch/${id}`);
+        const res = await axios.get(`https://nami-backend.onrender.com/api/Profile/fetch/${id}`);
         setFormData(res.data);
       } catch (error) {
         console.error('Error fetching academic data:', error);
@@ -42,7 +42,7 @@ const Academic = () => {
     
     try {
       // Update user academic data
-      await axios.put(`https://edoponline.netlify.app/api/Profile/update/${id}`, formData);
+      await axios.put(`https://nami-backend.onrender.com/api/Profile/update/${id}`, formData);
 
       // Show success message
       navigate('/profile');
