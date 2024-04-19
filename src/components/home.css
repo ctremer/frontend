@@ -1,0 +1,45 @@
+body{
+    background: #C7BAD9;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.title{
+    color: #725696;
+    font-size: 120px;
+    margin: 50px;
+}
+
+.center-container{
+    text-align: center;
+}
+
+p{
+    color: #616161;
+}
+
+.button-login{
+    background: #725696;
+    color: white;
+    width: 250px;
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 100px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+  }
+  
+  body{
+    background: #C7BAD9;
+}
+
+.signup-title{
+    color: #725696;
+    font-size: 80px;
+    margin: 50px;
+}

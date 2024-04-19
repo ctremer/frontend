@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../Style/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+
+
+    <title>Collapsible Sidebar</title>
+</head>
+<body>
+
+<div class="wrapper">
+   <div id="sidebarContainer"></div>
+
+
+
+
+   <!-- Page Content -->
+<div id="content">
+    <button type="button" id="sidebarCollapse" class="btn btn-info">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Scholarships div -->
+    <br><br>
+<div class="container mt-4">
+   <div class="row mt-3">
+        <div class="col-md-6 offset-md-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search by Title">
+        </div>
+    </div>
+    <div class="d-flex justify-content-center mt-5">
+    <h2><strong>Scholarships</strong></h2>
+    </div>
+    <div class="row mt-4">
+
+        <div class="col-md-4 mb-4">
+            <div class="scholarship-item">
+                <img src="scholarship_images/yale.png" alt="Yale University">
+                <div class="content">
+                    <h5 class="title">Yale University</h5>
+                    <p class="description">Best opportunity to study in the USA. Yale has opened its scholarships for Undergraduate, Masters, and Ph.D. Programs</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="scholarship-item">
+                <img src="scholarship_images/stanford.png" alt="Stanford University">
+                <div class="content">
+                    <h5 class="title">Stanford University</h5>
+                    <p class="description">Best opportunity for Higher Education in the USA. Stanford has opened scholarships for Masters and Ph.D. Programs</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="scholarship-item">
+                <img src="scholarship_images/yonsei.png" alt="Yonsei University">
+                <div class="content">
+                    <h5 class="title">Yonsei University</h5>
+                    <p class="description">Study in Korea with zero living expense. Yonsei University has opened scholarships for Masters and Ph.D. Programs.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .scholarship-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    transition: box-shadow 0.3s;
+    max-width: 300px; 
+    margin: 0 auto;
+}
+
+.scholarship-item:hover {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 1);
+}
+
+.scholarship-item img {
+    max-width: 100%;
+    height: 200px;
+    margin-bottom: 10px;
+}
+
+.title {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+}
+
+.description {
+    color: #666;
+    font-size: 0.9em;
+    height: 100px;
+}
+
+</style>
+
+
+</div>
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="script.js"></script>
+
+  <script>
+        $(document).ready(function () {
+
+            fetch('sidebar.html')
+                .then(response => response.text())
+                .then(data => $('#sidebarContainer').html(data));
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+
+</body>
+</html>
