@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import axios from 'axios';
+
 import { useNavigate, Link } from "react-router-dom";
 
 const navbarItems = [
@@ -8,6 +10,7 @@ const navbarItems = [
     { title: 'Profile', url: 'profile' },
   ];
 
+const userID = localStorage.getItem('_id');
 const scholarshipApply = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -36,6 +39,21 @@ const scholarshipApply = () => {
 
     const handleLogout = () => {
       localStorage.removeItem('auth');
+    }
+
+    const populateAcademicExperience = async () => {
+      try {
+          const res = await axios.get(`https://nami-backend.onrender.com/api/profile/fetch/${userID}`);
+          const academicHistory = res.data.academicHistory;
+          console.log(academicHistory)
+          const acadExperienceText = academicHistory.join('\n -');
+          setFormData({
+              ...formData,
+              university: acadExperienceText
+          });
+      } catch (error) {
+          console.error("Error fetching academic history:", error);
+      }
     }
 
     return (
@@ -78,10 +96,12 @@ const scholarshipApply = () => {
                 <div className="form-group">
                     <label style={{marginTop: "10px", marginBottom:"0px"}}>What is your major?</label>
                     <textarea rows="1" className="form-control" name="major" value={formData.major} onChange={handleChange}></textarea>
+                    
                 </div>
                 <div className="form-group">
-                    <label style={{marginTop: "10px", marginBottom:"0px"}}>What university do you attend?</label>
-                    <textarea rows="1" className="form-control" name="university" value={formData.university} onChange={handleChange}></textarea>
+                    <label style={{marginTop: "10px", marginBottom:"0px"}}>Academic History</label>
+                    <textarea rows="1" className="form-control" name="university" value={formData.university} onChange={handleChange} style={{height:"100px"}}></textarea>
+                    <button type="button" className="btn btn-secondary" onClick={populateAcademicExperience} style={{ marginTop: '10px' }}>Populate Academic History</button>
                 </div>
             </form>
             <button type="button" className="btn btn-primary" onClick={handleSubmit} style={{ marginTop: '10px' }}>Submit</button>

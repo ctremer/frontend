@@ -166,10 +166,11 @@ const ScholarshipsPage = () => {
                 <div className='col-md-4' key={scholarship._id}>
                   <Link to='/scholarship-details' state={{id: scholarship._id, isAdmin: false}} className="btn btn-success mr-2" style={{ borderColor: 'transparent',textDecoration: 'none', backgroundColor: 'transparent'}}>
                     <div className='card' style={{ width: '23rem', height: '350px' }}>
-                      <h5 className='card-img-top' style={{ height: '200px', fontSize: 'clamp(1.5rem, 4vw, 3rem)', backgroundImage: 'linear-gradient(to bottom, #222725, #ACAEAD)', color: 'white', alignContent: 'center' }}>{scholarship.title} </h5>
+                      {/* <h5 className='card-img-top' style={{ height: '200px', fontSize: 'clamp(1.5rem, 4vw, 3rem)', backgroundImage: 'linear-gradient(to bottom, #222725, #ACAEAD)', color: 'white', alignContent: 'center' }}>{scholarship.title} </h5> */}
+                      <img className='card-img-top' src={scholarship.photo} alt={scholarship.title + " Image"} style={{ height: '200px', objectFit: 'cover' }} />
                       <div className='card-body' style={{maxHeight: '150px', overflow: 'hidden' }}>
                       <h5 className='card-title'> Deadline: {new Date(scholarship.deadline).toLocaleDateString('en-US')}</h5>
-                        <ReactMarkdown>{scholarship.description}</ReactMarkdown>
+                        <ReactMarkdown>{scholarship.title}</ReactMarkdown>
                       </div>
                     </div>
                   </Link>

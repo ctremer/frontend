@@ -227,10 +227,11 @@ const JobsPage = () => {
                 <div className='col-md-4' key={job._id}>
                   <Link to='/job-details' state={{id: job._id}} className="btn btn-success mr-2" style={{ borderColor: 'transparent',textDecoration: 'none', backgroundColor: 'transparent'}}>
                     <div className='card' style={{ width: '23rem', cursor: 'pointer', height: '350px' }}>
-                      <h5 className='card-img-top' style={{ alignContent: 'center', height: '200px', fontSize: 'clamp(1.5rem, 4vw, 3rem)', backgroundImage: 'linear-gradient(to bottom, #222725, #ACAEAD)', color: 'white' }}>{job.title} </h5>
+                      {/* <h5 className='card-img-top' style={{ alignContent: 'center', height: '200px', fontSize: 'clamp(1.5rem, 4vw, 3rem)', backgroundImage: 'linear-gradient(to bottom, #222725, #ACAEAD)', color: 'white' }}>{job.title} </h5> */}
+                      <img className='card-img-top' src={job.photo} alt={job.title + " Image"} style={{ height: '200px', objectFit: 'cover' }} />
                       <div className='card-body' style={{maxHeight: '150px', overflow: 'hidden' }}>
                         <h5 className='card-title'>{job.employer}</h5>
-                        <ReactMarkdown>{job.description}</ReactMarkdown>
+                        <ReactMarkdown>{job.title}</ReactMarkdown>
                       </div>
                     </div>
                   </Link>

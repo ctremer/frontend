@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
 const navbar = [
   { title: "Dashboard", url: "admin-dashboard" },
@@ -59,6 +60,7 @@ export default function Job() {
   const [location, setLocation] = useState(initialLocation);
   const [remote, setRemote] = useState(initialRemote);
   const [benefits, setBenefits] = useState(initialBenefits);
+  const [photo, setPhoto] = useState(null);
 
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [searchInput, setSearchInput] = useState('');
@@ -197,6 +199,7 @@ export default function Job() {
         location,
         remote,
         benefits,
+        photo
       };
 
         // Handle form submission
@@ -434,7 +437,36 @@ export default function Job() {
     localStorage.removeItem('auth');
   }
 
-  
+  const updatePhoto = (event) => {
+    event.preventDefault();
+    const file = event.target.files[0];
+    uploadPhoto(file);
+  };
+
+  const uploadPhoto = async (file) => {
+    try {
+      const creds = {
+        accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
+        secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
+      };
+      const s3 = new S3Client({
+        credentials: creds,
+        region: import.meta.env.VITE_AWS_REGION,
+      });
+      
+      const params = {
+        Bucket: 'nami-ed-op-job-photos',
+        Key: file.name,
+        Body: file,
+        ContentType: file.type
+      };
+      const data = await s3.send(new PutObjectCommand(params));
+      console.log(data);
+    } catch (error) {
+      console.error("Error uploading photo to S3", error);
+    }
+    setPhoto('https://nami-ed-op-job-photos.s3.us-east-2.amazonaws.com/' + file.name);
+  };
 
   return (
     <div>
@@ -787,6 +819,10 @@ export default function Job() {
                   <ReactMarkdown >{benefits}</ReactMarkdown>
                 </div>
                 
+                <div className="form-group row">
+                  <label className="label" style={{marginBottom:"0px"}}>Upload photo</label>
+                  <input type="file" onChange={updatePhoto} accept=".png" />
+                </div>
 
                 <button type="submit" className="btn btn-primary" onClick={handleSubmit}>{editJobData ? 'Update' : 'Create'}</button>
                 <button type="button" className="btn btn-secondary" onClick={handleCancel}>Cancel</button>
