@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import ReactMarkdown from 'react-markdown';
 
 // Navbar for admin
 const adminNavbar = [
@@ -27,6 +28,14 @@ export default function JobDetails() {
     const [reload, setReload] = useState(false);
     const navigate = useNavigate();
 
+    const auth = localStorage.getItem('auth');
+
+    useEffect(() => {
+        if (!auth) {
+        return navigate('/login');
+        }
+    });
+
     const goBack = () => {
         navigate(-1);
     };
@@ -52,12 +61,17 @@ export default function JobDetails() {
 
     useEffect(() => {
         findJobById(id)
+        
     }, [id, jobs]);
 
     // Determine which navbar to use based on the URL
     const getNavbar = () => {
       return isAdmin ? adminNavbar : userNavbar;
     };
+
+    const handleLogout = () => {
+        localStorage.removeItem('auth');
+      }
 
     return (
         <div>
@@ -94,7 +108,7 @@ export default function JobDetails() {
                         </ul>
                     </div>
                     <Link to='/'>
-                        <button type='button' className='btn btn-danger' id='sidebarCollapse'>
+                        <button type='button' className='btn btn-danger' id='sidebarCollapse' onClick={handleLogout}>
                         Logout
                         </button>
                     </Link>
@@ -108,46 +122,49 @@ export default function JobDetails() {
                         <h3 style={{ marginBottom: '10px', fontWeight: 'bold' }}>Job Details</h3>
                         <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Title:</strong> {job.title}
+                                <h1 style={{color:"black", }}>Title:</h1> <span style={{ fontSize: '24px', color: '#725696'  }}>{job.title}</span>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Job Type:</strong> {job.type}
+                                <h1 style={{color:"black", }}>Job Type:</h1> <span style={{ fontSize: '24px', color: '#725696'  }}>{job.type}</span>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Description:</strong> {job.description}
+                            <h1 style={{color:"black", }}>Description:</h1>
+                            <ReactMarkdown >{job.description}</ReactMarkdown>
+                                
+                            </div>
+                            
+                            <div style={{ marginBottom: '10px' }}>
+                                <h1 style={{color:"black", }}>Employer:</h1> <span style={{fontSize: '24px', color: '#725696'  }}>{job.employer}</span>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Employer:</strong> {job.employer}
+                                <h1 style={{color:"black", }}>Pay Type:</h1> <span style={{ fontSize: '24px', color: '#725696'  }}>{job.payType}</span>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Pay Type:</strong> {job.payType}
+                                <h1 style={{color:"black", }}>Salary:</h1> <span style={{ fontSize: '24px', color: '#725696'  }}>{job.salary}</span>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Salary:</strong> {job.salary}
+                                <h1 style={{color:"black", }}>Schedule:</h1> <span style={{ fontSize: '24px', color: '#725696'  }}>{job.schedule}</span>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Hourly Pay:</strong> {job.hourlyPay}
+                                <h1 style={{color:"black", }}>Weekly Hours:</h1> <span style={{ fontSize: '24px', color: '#725696'  }}>{job.weeklyHours}</span>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Schedule:</strong> {job.schedule}
+                                <h1 style={{color:"black", }}>Required Qualifications:</h1>
+                                <ReactMarkdown >{job.reqQual}</ReactMarkdown>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Weekly Hours:</strong> {job.weeklyHours}
+                                <h1 style={{color:"black", }}>Preferred Qualifications:</h1>
+                                <ReactMarkdown >{job.prefQual}</ReactMarkdown>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Required Qualifications:</strong> {job.reqQual}
+                                <h1 style={{color:"black", }}>Location:</h1> <span style={{ fontSize: '24px', color: '#725696' }}>{job.location}</span>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Preferred Qualifications:</strong> {job.prefQual}
+                                <h1 style={{color:"black", }}>Remote:</h1> <span style={{ fontSize: '24px', color: '#725696' }}>{job.remote}</span>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Location:</strong> {job.location}
-                            </div>
-                            <div style={{ marginBottom: '10px' }}>
-                                <strong>Remote:</strong> {job.remote}
-                            </div>
-                            <div style={{ marginBottom: '10px' }}>
-                                <strong>Benefits:</strong> {job.benefits}
+                                <h1 style={{color:"black", }}>Benefits:</h1>
+                                <ReactMarkdown >{job.benefits}</ReactMarkdown>
                             </div>
                         </div>
                         </>

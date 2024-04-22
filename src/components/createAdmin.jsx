@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../assets/Style/styles.css';
 
@@ -13,6 +13,14 @@ const CreateAdmin = () => {
   const [verificationUsername, setVerificationUsername] = useState('');
   const [verificationPassword, setVerificationPassword] = useState('');
   const navigate = useNavigate();
+
+  const auth = localStorage.getItem('auth');
+
+  useEffect(() => {
+    if (!auth) {
+      return navigate('/login');
+    }
+  });
 
   const handleCreate = async () => {
     try {
@@ -93,6 +101,10 @@ const CreateAdmin = () => {
     }
   };
 
+  const goBack = () => {
+    navigate(-1);
+  };
+
   return (
     
     <div className="center-container">
@@ -134,7 +146,7 @@ const CreateAdmin = () => {
       ></input>
       <br></br>
       {error && <p className="error-message">{error}</p>}<br></br>
-      <button className="button-signup" onClick={toggleVerificationForm}>
+      <button className="btn btn-primary" onClick={toggleVerificationForm}>
         Next ➜
       </button>
 
@@ -164,7 +176,11 @@ const CreateAdmin = () => {
           </button>
         </div>
       )}
+      <button onClick={goBack} className="btn btn-secondary" style = {{marginLeft: '5px'}}>
+                    Back
+                </button>
     </div>
+    
   );
 };
 

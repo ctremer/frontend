@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
+import ReactMarkdown from "react-markdown";
 
 const navbar = [
   { title: "Dashboard", url: "admin-dashboard" },
@@ -15,7 +16,6 @@ export default function Scholarship() {
   const [currentEditId, setCurrentEditId] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deletingScholarship, setDeletingScholarship] = useState(false);
-
   const [showTitleError, setShowTitleError] = useState(false);
   const [showOpenDateError, setShowOpenDateError] = useState(false);
   const [showDeadlineError, setShowDeadlineError] = useState(false);
@@ -54,6 +54,16 @@ export default function Scholarship() {
   const [isAmtPerAwardValid, setIsAmtPerAwardValid] = useState(false);
   const [isAwardsAvailValid, setIsAwardsAvailValid] = useState(false);
 
+  const navigate = useNavigate();
+
+  const auth = localStorage.getItem('auth');
+
+  useEffect(() => {
+    if (!auth) {
+      return navigate('/login');
+    }
+  });
+
   const handleFetch = async () => {
     const response = await axios("https://nami-backend.onrender.com/api/scholarship/fetch");
     setScholarships(response?.data);
@@ -87,6 +97,7 @@ export default function Scholarship() {
       setShowDeadlineError(false);
     }
 
+
     if(!amtPerAward) {
       setShowAmtPerAwardError(true);
     } else {
@@ -94,6 +105,8 @@ export default function Scholarship() {
     }
 
     if(!awardsAvail) {
+      setShowAwardsAvailError(true);
+    } else {
       setShowAwardsAvailError(false);
     }
 
@@ -106,11 +119,14 @@ export default function Scholarship() {
     }
 
     const awardsAvailValid = true
-    if (awardsAvail === (!isNaN(parseFloat(awardsAvail)) && isFinite(awardsAvail))) {
+    if (awardsAvail === null || (!isNaN(parseFloat(awardsAvail)) && isFinite(awardsAvail))) {
       setIsAwardsAvailValid(awardsAvailValid);
     }
 
-    if (isAmtPerAwardValid && isAwardsAvailValid && !showOpenAfterDeadlineError) {
+    // if (!awardsAvail) {
+    //   setAwardsAvail(null)
+    // }
+    if (awardsAvail != null && awardsAvail != "" && amtPerAward != null && amtPerAward != "" && !showOpenAfterDeadlineError) {
       const scholarshipData = {
         title,
         openDate,
@@ -124,16 +140,17 @@ export default function Scholarship() {
 
       scholarshipData.openDate = formatDate(scholarshipData.openDate)
       scholarshipData.deadline = formatDate(scholarshipData.deadline)
-
+      console.log(awardsAvail)
       if(editScholarshipData) {
         await axios.put(`https://nami-backend.onrender.com/api/scholarship/update/${currentEditId}`, scholarshipData);
         setCurrentEditId(null);
       } else {
+        console.log(awardsAvail)
         await axios.post("https://nami-backend.onrender.com/api/scholarship/create", scholarshipData);
       }
       setReload(!reload);
       setShowAddForm(false);
-      setEditScholarshipData(null);
+      setEditScholarshipData("");
 
       // Clear form fields
       setTitle("");
@@ -195,36 +212,20 @@ export default function Scholarship() {
   const handleAwardsAvailChange = (e) => {
     const value = e.target.value;
 
-    // if (!isNaN && !value.includes(" ")) {
-    //   setIsAwardsAvailValid(true);
-    //   setAwardsAvail(value);
-    //   setShowAwardsAvailError(false);
-    // } else if (value === "") {
-    //   setIsAwardsAvailValid(true);
-    //   setAwardsAvail(" ");
-    //   setShowAwardsAvailError(false);
-    // } else {
-    //   setShowAwardsAvailError(true);
-    //   setIsAwardsAvailValid(false);
-    // }
-
-
-    if (value === "") {
-      setIsAwardsAvailValid(true);
-      setAwardsAvail(" ");
-      setShowAwardsAvailError(false);
-    } else if (!isNaN(value)) {
+    if (!isNaN(value) && value != "" && !value.includes(" ")) {
       setIsAwardsAvailValid(true);
       setAwardsAvail(value);
       setShowAwardsAvailError(false);
-    } else {
-      setAwardsAvail(" ");
+      return;
+    } else if (value == "") {
+      setAwardsAvail(value);
       setShowAwardsAvailError(true);
-    }
-  
-
-    
+      setIsAwardsAvailValid(false);
+    } else if (value.includes(" ")) {
+      setIsAwardsAvailValid(false);
+    } 
   };
+  
 
   const handleOpenDateChange = (e) => {
     
@@ -354,6 +355,10 @@ export default function Scholarship() {
     setFilterOpen(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('auth');
+  }
+
   return (
     <div>
       <div className="bg-dark text-white">
@@ -389,7 +394,7 @@ export default function Scholarship() {
             </ul>
           </div>
           <Link to = '/'>
-          <button type='button' className='btn btn-danger' id='sidebarCollapse'>
+          <button type='button' className='btn btn-danger' id='sidebarCollapse' onClick={handleLogout}>
             Logout
           </button>
           </Link>
@@ -557,11 +562,12 @@ export default function Scholarship() {
                 </div>
                 
 
-                <div className="form-group row">
+                <div className="form-group row" style={{maxWidth:'400px'}}>
                   <label className="col-sm-3 col-form-label">&nbsp;</label>
                   <label htmlFor="description" className="label" style={{marginBottom: "0px", marginTop: "-30px"}}>Description</label>
                   <textarea type="text" className="textField-small" id="description" style={{height: "150px",backgroundColor: "white",maxWidth:"400px"}}
                   value={description} onChange={(e) => setDescription(e.target.value)}/>
+                  <ReactMarkdown>{description}</ReactMarkdown>
                 </div>
                 
 
@@ -575,17 +581,19 @@ export default function Scholarship() {
 
                 <div className="form-group row">
                   <label htmlFor="awardsAvailError" style={{ width: "300px", color: "red", marginBottom: "0px", marginTop: "10px"}} className="error">{showAwardsAvailError ? '* Awards Available must be a number' : ''}</label>
-                  <label htmlFor="awardsAvail" className="label" style={{marginBottom: "0px"}}>Awards Available</label>
+                  <label htmlFor="awardsAvail" className="label" style={{marginBottom: "0px"}}>Awards Available*</label>
                   <input type="text" className="textField-small" id="awardsAvail" style={{backgroundColor: "white",maxWidth: "400px"}}
-                  value={awardsAvail} onChange={handleAwardsAvailChange}/>
+                  value = {awardsAvail}
+                  onChange={handleAwardsAvailChange} required/>
                 </div>
                 
 
-                <div className="form-group row" style={{alignSelf:"center"}}>
+                <div className="form-group row" style={{alignSelf:"center", maxWidth:'400px'}}>
                   <label className="col-sm-3 col-form-label">&nbsp;</label>
                   <label htmlFor="qualifications" className="label" style={{marginTop: "-30px", marginBottom: "0px"}}>Qualifications</label>
                   <textarea type="text" className="textField-large" id="qualifications" style={{justifyContent: "left", height: "150px", backgroundColor: "white",marginBottom: "10px", maxWidth: "400px"}}
                   value={qualifications} onChange={(e) => setQualifications(e.target.value)}/>
+                  <ReactMarkdown>{qualifications}</ReactMarkdown>
                 </div>
                 
 

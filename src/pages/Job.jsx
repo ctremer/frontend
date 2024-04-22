@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
+import ReactMarkdown from "react-markdown";
 
 const navbar = [
   { title: "Dashboard", url: "admin-dashboard" },
@@ -21,7 +22,7 @@ export default function Job() {
   const [showDescriptionError, setShowDescriptionError] = useState(false);
   const [showEmployerError, setShowEmployerError] = useState(false);
   const [showSalaryError, setShowSalaryError] = useState(false);
-  const [showHourlyPayError, setShowHourlyPayError] = useState(false);
+  //const [showHourlyPayError, setShowHourlyPayError] = useState(false);
   const [showWeeklyHoursError, setShowWeeklyHoursError] = useState(false);
   const [showScheduleError, setShowScheduleError] = useState(false);
   const [showReqQualError, setShowReqQualError] = useState(false);
@@ -35,7 +36,7 @@ export default function Job() {
   const initialEmployer = editJobData ? editJobData.employer : "";
   const initialPayType = editJobData ? editJobData.payType : "";
   const initialSalary = editJobData ? editJobData.salary : "";
-  const initialHourlyPay = editJobData ? editJobData.hourlyPay : "";
+  //const initialHourlyPay = editJobData ? editJobData.hourlyPay : "";
   const initialSchedule = editJobData ? editJobData.schedule : "";
   const initialWeeklyHours = editJobData ? editJobData.weeklyHours : "";
   const initialReqQuals = editJobData ? editJobData.reqQual : "";
@@ -50,7 +51,7 @@ export default function Job() {
   const [employer, setEmployer] = useState(initialEmployer);
   const [payType, setPayType] = useState(initialPayType);
   const [salary, setSalary] = useState(initialSalary);
-  const [hourlyPay, setHourlyPay] = useState(initialHourlyPay);
+  //const [hourlyPay, setHourlyPay] = useState(initialHourlyPay);
   const [schedule, setSchedule] = useState(initialSchedule);
   const [weeklyHours, setWeeklyHours] = useState(initialWeeklyHours);
   const [reqQual, setReqQual] = useState(initialReqQuals);
@@ -70,10 +71,16 @@ export default function Job() {
   const [reload, setReload] = useState(false);
 
   const[isSalaryValid, setIsSalaryValid] = useState(false);
-  const[isHourlyPayValid, setIsHourlyPayValid] = useState(false);
+  //const[isHourlyPayValid, setIsHourlyPayValid] = useState(false);
   const[isWeeklyHoursValid, setIsWeeklyHoursValid] = useState(false);
+  const navigate = useNavigate();
+  const auth = localStorage.getItem('auth');
 
-  const[readyToSubmit, setReadyToSubmit] = useState(true);
+  useEffect(() => {
+    if (!auth) {
+      return navigate('/login');
+    }
+  });
 
   const handleFetch = async () => {
     const response = await axios.get("https://nami-backend.onrender.com/api/job/fetch");
@@ -83,6 +90,8 @@ export default function Job() {
   useEffect(() => {
     handleFetch();
   }, [reload]);
+
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -146,24 +155,32 @@ export default function Job() {
         setShowWeeklyHoursError(false);
     }
 
-   
+    if (!salary) {
+      setIsSalaryValid(false);
+      setShowSalaryError(true);
+    }
     // Add similar checks for other required fields
 
     // Check if salary is valid
-    const salaryValid = salary === '' || (!isNaN(parseFloat(salary)) && isFinite(salary));
-    setIsSalaryValid(salaryValid);
+    // const salaryValid = salary === '' || (!isNaN(parseFloat(salary)) && isFinite(salary));
+    // setIsSalaryValid(salaryValid);
 
     // Check if hourlyPay is valid
-    const hourlyPayValid = hourlyPay === '' || (!isNaN(parseFloat(hourlyPay)) && isFinite(hourlyPay));
-    setIsHourlyPayValid(hourlyPayValid);
+    // const hourlyPayValid = hourlyPay === '' || (!isNaN(parseFloat(hourlyPay)) && isFinite(hourlyPay));
+    // setIsHourlyPayValid(hourlyPayValid);
 
     // Check if weeklyHours is valid
     const weeklyHoursValid = weeklyHours === '' || (!isNaN(parseFloat(weeklyHours)) && isFinite(weeklyHours));
     setIsWeeklyHoursValid(weeklyHoursValid);
 
     // Set readyToSubmit based on all conditions
-    const readyToSubmit = isReady && salaryValid && hourlyPayValid && weeklyHoursValid;
-
+    // const readyToSubmit = isReady && salaryValid && hourlyPayValid && weeklyHoursValid;
+    console.log("Salary is" + salary)
+    if (salary != null && salary != "") {
+      setIsSalaryValid(true)
+    }
+    console.log("Is salary valid " + isSalaryValid)
+    const readyToSubmit = isReady && weeklyHoursValid && salary != null && salary != "";
     if (readyToSubmit) {
       const jobData = {
         title,
@@ -172,7 +189,7 @@ export default function Job() {
         employer,
         payType: payType === "" ? null : payType, // Convert empty string to null
         salary: salary === "" ? null : parseFloat(salary), // Convert empty string to null or parse as float
-        hourlyPay: hourlyPay === "" ? null : parseFloat(hourlyPay), // Convert empty string to null or parse as float
+        //hourlyPay: hourlyPay === "" ? null : parseFloat(hourlyPay), // Convert empty string to null or parse as float
         schedule,
         weeklyHours: weeklyHours === "" ? null : parseFloat(weeklyHours), // Convert empty string to null or parse as float
         reqQual,
@@ -183,15 +200,9 @@ export default function Job() {
       };
 
         // Handle form submission
-        if (editJobData) {
-          if (jobData.salary == 0) {
-            jobData.salary = " "
-          }
-
-          if (jobData.hourlyPay == 0) {
-            jobData.hourlyPay = " "
-          }
-          console.log(jobData)
+        if (editJobData  && salary != null && salary != "") {
+      
+          console.log(jobData.salary)
           console.log("updating")
             await axios.put(`https://nami-backend.onrender.com/api/job/update/${currentEditId}`, jobData);
             setCurrentEditId(null);
@@ -207,7 +218,7 @@ export default function Job() {
         setEmployer("");
         setPayType("");
         setSalary("");
-        setHourlyPay("");
+        //setHourlyPay("");
         setSchedule("");
         setWeeklyHours("");
         setReqQual("");
@@ -224,56 +235,51 @@ export default function Job() {
 
   const handleSalaryChange = (e) => {
     const value = e.target.value;
-
-    
     if (!isNaN(value) && value != "" && !value.includes(" ")) {
-      let temp = parseInt(value, 10);
-      console.log(temp)
       setIsSalaryValid(true);
-      setSalary(temp);
+      setSalary(value);
       setShowSalaryError(false);
       return;
     } else if (value == "") {
-      setSalary(0);
-      
-      setIsSalaryValid(false);
-    } else {
-      setIsSalaryValid(false);
+      setSalary(value);
       setShowSalaryError(true);
-    } 
+      setIsSalaryValid(false);
+    } else if (value.includes(" ")) {
+      setIsSalaryValid(false);
+    }
   };
 
-  const handleHourlyPayChange = (e) => {
-    const value = e.target.value;
+  // const handleHourlyPayChange = (e) => {
+  //   const value = e.target.value;
 
-    if (!isNaN(value) && value != "" && !value.includes(" ")) {
-      console.log("replacing")
-      let temp = parseInt(value, 10);
-      console.log(temp)
-      setIsHourlyPayValid(true);
-      setHourlyPay(temp);
-      setShowHourlyPayError(false);
-      return;
-    } else if (value == "") {
-      setHourlyPay(0);
-      setIsHourlyPayValid(true);
-    } else {
-      setIsHourlyPayValid(false);
-      setShowHourlyPayError(true);
-    } 
+  //   if (!isNaN(value) && value != "" && !value.includes(" ")) {
+  //     console.log("replacing")
+  //     let temp = parseInt(value, 10);
+  //     console.log(temp)
+  //     setIsHourlyPayValid(true);
+  //     setHourlyPay(temp);
+  //     setShowHourlyPayError(false);
+  //     return;
+  //   } else if (value == "") {
+  //     setHourlyPay(0);
+  //     setIsHourlyPayValid(true);
+  //   } else {
+  //     setIsHourlyPayValid(false);
+  //     setShowHourlyPayError(true);
+  //   } 
 
-    // If the input is empty, clear the hourly state
-    // if (!isNaN(value)) {
-    //   setIsHourlyPayValid(true); // Reset validation state
-    //   setHourlyPay(value); // Clear the hourly state
-    //   setShowHourlyPayError(false);
-    //   return;
-    // } else {
-    //   setHourlyPay("");
-    //   e.target.value = "";
-    //   setShowHourlyPayError(true);
-    // }
-  };
+  //   // If the input is empty, clear the hourly state
+  //   // if (!isNaN(value)) {
+  //   //   setIsHourlyPayValid(true); // Reset validation state
+  //   //   setHourlyPay(value); // Clear the hourly state
+  //   //   setShowHourlyPayError(false);
+  //   //   return;
+  //   // } else {
+  //   //   setHourlyPay("");
+  //   //   e.target.value = "";
+  //   //   setShowHourlyPayError(true);
+  //   // }
+  // };
 
   const handleWeeklyHoursChange = (e) => {
     const value = e.target.value;
@@ -303,7 +309,7 @@ export default function Job() {
     setEmployer(job.employer);
     setPayType(job.payType);
     setSalary(job.salary);
-    setHourlyPay(job.hourlyPay);
+    //setHourlyPay(job.hourlyPay);
     setSchedule(job.schedule);
     setWeeklyHours(job.weeklyHours);
     setReqQual(job.reqQual);
@@ -346,7 +352,7 @@ export default function Job() {
     setEmployer("");
     setPayType("");
     setSalary("");
-    setHourlyPay("");
+    //setHourlyPay("");
     setSchedule("");
     setWeeklyHours("");
     setReqQual("");
@@ -417,12 +423,18 @@ export default function Job() {
     setShowDescriptionError(toggle);
     setShowEmployerError(toggle);
     setShowSalaryError(toggle);
-    setShowHourlyPayError(toggle);
+    //setShowHourlyPayError(toggle);
     setShowWeeklyHoursError(toggle);
     setShowScheduleError(toggle);
     setShowReqQualError(toggle);
     setShowRemoteError(toggle);
   }
+
+  const handleLogout = () => {
+    localStorage.removeItem('auth');
+  }
+
+  
 
   return (
     <div>
@@ -459,7 +471,7 @@ export default function Job() {
             </ul>
           </div>
           <Link to = '/'>
-          <button type='button' className='btn btn-danger' id='sidebarCollapse'>
+          <button type='button' className='btn btn-danger' id='sidebarCollapse' onClick={handleLogout}>
             Logout
           </button>
           </Link>
@@ -636,7 +648,7 @@ export default function Job() {
         {showAddForm && (
           <div className="add-form">
             <h2 className='d-flex justify-content-center'> {editJobData ? 'Edit Job' : 'Create Jobs ( * indicates Required Field)'}</h2>
-            <div className='d-flex justify-content-center'>
+            <div className='d-flex justify-content-center' style={{maxWidth:'550px', margin: '0 auto', width: '50%'}} >
               <form onSubmit={handleSubmit}>
                 
                 <div className="form-group row">
@@ -670,6 +682,9 @@ export default function Job() {
                   <label htmlFor="description" className="label" style={{marginBottom:"0px"}}>Description*</label>
                   <textarea type="text" className="textField-large" id="description" style={{height:"100px"}}
                   value={description} onChange={(e) => setDescription(e.target.value)} required />
+                  <div>
+                  <ReactMarkdown >{description}</ReactMarkdown>
+                </div>
                 </div>
                 
 
@@ -699,17 +714,17 @@ export default function Job() {
 
                 <div className="form-group row">
                   <label htmlFor="salaryError" className="error" style={{width: "200px", color: "red", marginBottom: "0px", marginTop: "10px"}}>{showSalaryError ? '* Salary must be a number' : ''}</label>
-                  <label htmlFor="salary" className="label" style={{marginBottom:"0px"}}>Yearly Salary (USD)</label>
+                  <label htmlFor="salary" className="label" style={{marginBottom:"0px"}}>Salary (USD)*</label>
                   <input type="text" className={`textField-small ${!isSalaryValid}`} id="salary" style={{backgroundColor:"white"}}
-                  value={salary} onChange={handleSalaryChange} />
+                  value={salary} onChange={handleSalaryChange} required/>
                 </div>
                 
-                <div className="form-group row">
+                {/* <div className="form-group row">
                   <label htmlFor="hourlyPayError" className="error" style={{width: "200px", color: "red", marginBottom: "0px", marginTop: "10px"}}>{showHourlyPayError ? '* Hourly Pay must be a number' : ''}</label>
                   <label htmlFor="hourlyPay" className="label" style={{marginBottom:"0px"}}>Hourly Pay (USD)</label>
                   <input type="text" className={`textField-small ${!isHourlyPayValid}`} id="hourlyPay" style={{backgroundColor:"white"}}
                   value={hourlyPay} onChange={handleHourlyPayChange}/>
-                </div>
+                </div> */}
                 
                 <div className="form-group row">
                   <label htmlFor="scheduleError" className="error" style={{width: "200px", color: "red", marginBottom: "0px", marginTop: "10px"}}>{showScheduleError ? '* Schedule is required' : ''}</label>
@@ -730,6 +745,7 @@ export default function Job() {
                   <label htmlFor="reqQual" className="label" style={{marginBottom:"0px"}}>Required Qualifications*</label>
                   <textarea type="text" className="textField-large" id="reqQual" style={{height:"100px"}}
                   value={reqQual} onChange={(e) => setReqQual(e.target.value)} required />
+                  <ReactMarkdown >{reqQual}</ReactMarkdown>
                 </div>
                 
                 <div className="form-group row">
@@ -737,6 +753,7 @@ export default function Job() {
                   <label htmlFor="prefQual" className="label" style={{marginBottom:"0px", marginTop:"-30px"}}>Preferred Qualifications</label>
                   <textarea type="text" className="textField-large" id="prefQual" style={{height:"100px"}}
                   value={prefQual} onChange={(e) => setPrefQual(e.target.value)}/>
+                  <ReactMarkdown >{prefQual}</ReactMarkdown>
                 </div>
                 
                 <div className="form-group row">
@@ -767,6 +784,7 @@ export default function Job() {
                   <label htmlFor="benefits" className="label" style={{marginBottom:"0px", marginTop:"-30px"}}>Benefits</label>
                   <textarea type="text" className="textField-small" id="benefits" style={{height:"100px"}}
                   value={benefits} onChange={(e) => setBenefits(e.target.value)}/>
+                  <ReactMarkdown >{benefits}</ReactMarkdown>
                 </div>
                 
 

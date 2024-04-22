@@ -34,10 +34,13 @@ const scholarshipApply = () => {
         navigate(-1);
     };
 
+    const handleLogout = () => {
+      localStorage.removeItem('auth');
+    }
+
     return (
         <>
-      <div className="wrapper">
-      <div className='bg-dark text-white' style={{ position: 'fixed', width: '100%'}}>
+      <div className='bg-dark text-white' style={{ zIndex: '1000', width: '100%'}}>
           <div id='navbar' style={{ display: 'flex', paddingBlock: '.5em', justifyContent: 'space-between', alignItems: 'center'}}>
             <h2 style={{ marginInline: '1em', color: 'white', textDecoration: 'none' }}>
               <Link to="/user-dashboard" style={{ color: 'white', textDecoration: 'none' }}>ED OP</Link>
@@ -52,7 +55,7 @@ const scholarshipApply = () => {
               ))}
             </ul>
             <Link to = '/' style={{ marginLeft: 'auto' }}>
-          <button type='button' className='btn btn-danger' id='sidebarCollapse'>
+          <button type='button' className='btn btn-danger' id='sidebarCollapse' onClick={handleLogout}>
             Logout
           </button>
           </Link>
@@ -84,7 +87,6 @@ const scholarshipApply = () => {
             <button type="button" className="btn btn-primary" onClick={handleSubmit} style={{ marginTop: '10px' }}>Submit</button>
             <button type="button" className="btn btn-secondary" onClick={goBack} style={{ marginTop: '10px', marginLeft: '5px' }}>Back</button>
         </div>
-      </div>
     </>
         
     );

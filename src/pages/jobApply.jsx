@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 
 const navbarItems = [
@@ -20,6 +20,14 @@ const JobApply = () => {
     const userID = localStorage.getItem('_id');
     const location = useLocation();
     const job = location.state;
+
+    const auth = localStorage.getItem('auth');
+
+    useEffect(() => {
+      if (!auth) {
+        return navigate('/login');
+      }
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -65,11 +73,29 @@ const JobApply = () => {
         navigate(-1);
     };
 
+    const handleLogout = () => {
+      localStorage.removeItem('auth');
+    }
+
+    const populateWorkExperience = async () => {
+      try {
+          const res = await axios.get(`https://nami-backend.onrender.com/api/profile/fetch/${userID}`);
+          const employmentHistory = res.data.employmentHistory;
+          console.log(employmentHistory)
+          const workExperienceText = employmentHistory.join('\n -'); // Assuming employmentHistory is an array of strings
+          setFormData({
+              ...formData,
+              experience: workExperienceText
+          });
+      } catch (error) {
+          console.error("Error fetching employment history:", error);
+      }
+  };
+
     return (
 
     <>
-      <div className="wrapper">
-      <div className='bg-dark text-white' style={{ position: 'fixed', width: '100%'}}>
+      <div className='bg-dark text-white' style={{ zIndex: '1000', width: '100%'}}>
           <div id='navbar' style={{ display: 'flex', paddingBlock: '.5em', justifyContent: 'space-between', alignItems: 'center'}}>
             <h2 style={{ marginInline: '1em', color: 'white', textDecoration: 'none' }}>
               <Link to="/user-dashboard" style={{ color: 'white', textDecoration: 'none' }}>ED OP</Link>
@@ -84,7 +110,7 @@ const JobApply = () => {
               ))}
             </ul>
             <Link to = '/' style={{ marginLeft: 'auto' }}>
-          <button type='button' className='btn btn-danger' id='sidebarCollapse'>
+          <button type='button' className='btn btn-danger' id='sidebarCollapse' onClick={handleLogout}>
             Logout
           </button>
           </Link>
@@ -104,6 +130,7 @@ const JobApply = () => {
                 <div className="form-group">
                     <label style={{marginTop: "10px", marginBottom:"0px"}}>Previous Work Experience</label>
                     <textarea rows="3" className="form-control" name="experience" value={formData.experience} onChange={handleChange}></textarea>
+                    <button type="button" className="btn btn-secondary" onClick={populateWorkExperience} style={{ marginTop: '10px' }}>Populate Work Experience</button>
                 </div>
                 <div className="form-group">
                     <label style={{marginTop: "10px", marginBottom:"0px"}}>Why are you a good fit for the job?</label>
@@ -113,7 +140,6 @@ const JobApply = () => {
             <button type="button" className="btn btn-primary" onClick={handleSubmit} style={{ marginTop: '10px' }}>Submit</button>
             <button type="button" className="btn btn-secondary" onClick={goBack} style={{ marginTop: '10px', marginLeft: '5px' }}>Back</button>
         </div>
-      </div>
     </>
         
         

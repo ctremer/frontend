@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import ReactMarkdown from "react-markdown";
 
 // Navbar for admin
 const adminNavbar = [
@@ -27,6 +28,14 @@ export default function JobDetails() {
     const [schols, setSchols] = useState([]);
     const [reload, setReload] = useState(false);
     const navigate = useNavigate();
+
+    const auth = localStorage.getItem('auth');
+
+    useEffect(() => {
+        if (!auth) {
+        return navigate('/login');
+        }
+    });
 
     const goBack = () => {
         navigate(-1);
@@ -73,6 +82,10 @@ export default function JobDetails() {
     return formattedDate;
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('auth');
+      }
+
     return (
         <div>
             <div className="bg-dark text-white">
@@ -108,7 +121,7 @@ export default function JobDetails() {
                         </ul>
                     </div>
                     <Link to='/'>
-                        <button type='button' className='btn btn-danger' id='sidebarCollapse'>
+                        <button type='button' className='btn btn-danger' id='sidebarCollapse' onClick={handleLogout}>
                         Logout
                         </button>
                     </Link>
@@ -123,25 +136,27 @@ export default function JobDetails() {
                             <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)' }}>
                             
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Title:</strong> {schol.title}
+                                <h1>Title:</h1> <span style={{ fontSize: '24px', color: '#725696'  }}>{schol.title}</span>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Open Date:</strong> {formatDate(schol.openDate)}
+                                <h1>Open Date:</h1> <span style={{ fontSize: '24px', color: '#725696'  }}>{formatDate(schol.openDate)}</span>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Deadline:</strong> {formatDate(schol.deadline)}
+                                <h1>Deadline:</h1> <span style={{ fontSize: '24px', color: '#725696'  }}>{formatDate(schol.deadline)}</span>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Description:</strong> {schol.description}
+                                <h1>Description:</h1> 
+                                <ReactMarkdown>{schol.description}</ReactMarkdown>
                             </div>                           
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Amount per Award:</strong> {schol.amtPerAward}
+                                <h1>Amount per Award:</h1> <span style={{ fontSize: '24px', color: '#725696'  }}>{schol.amtPerAward}</span>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Awards Available:</strong> {schol.awardsAvail}
+                                <h1>Awards Available:</h1> <span style={{ fontSize: '24px', color: '#725696'  }}>{schol.awardsAvail}</span>
                             </div>
                             <div style={{ marginBottom: '10px' }}>
-                                <strong>Qualifications:</strong> {schol.qualifications}
+                                <h1>Qualifications:</h1> 
+                                <ReactMarkdown>{schol.qualifications}</ReactMarkdown>
                             </div>
                         </div>
                             

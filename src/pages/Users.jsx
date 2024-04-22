@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 const navbar = [
   { title: "Dashboard", url: "admin-dashboard" },
@@ -10,6 +10,15 @@ const navbar = [
 
 export default function Users() {
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
+  const auth = localStorage.getItem('auth');
+
+  useEffect(() => {
+    if (!auth) {
+      return navigate('/login');
+    }
+  });
+
   const handleFetch = async () => {
     try {
       const response = await axios.get("https://nami-backend.onrender.com/api/user/fetch");
@@ -22,18 +31,29 @@ export default function Users() {
     handleFetch();
   }, []);
   const handleDelete = async (userId) => {
-    try {
-      await axios.delete(`https://nami-backend.onrender.com/api/user/adminDelete/${userId}`);
-      // After successful deletion, fetch users again to update the list
-      handleFetch();
-    } catch (error) {
-      console.error("Error deleting user:", error);
+    // Ask for confirmation before proceeding with deletion
+    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+    
+    // If the user confirms, proceed with the deletion
+    if (confirmDelete) {
+        try {
+            await axios.delete(`https://nami-backend.onrender.com/api/user/adminDelete/${userId}`);
+            // After successful deletion, fetch users again to update the list
+            handleFetch();
+        } catch (error) {
+            console.error("Error deleting user:", error);
+        }
     }
-  };
+};
+
   const formatBirthday = (birthday) => {
     const date = new Date(birthday);
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem('auth');
+  }
   return (
     <div>
       <div className="bg-dark text-white">
@@ -69,21 +89,25 @@ export default function Users() {
                 </li>
 
               ))}
-              <Link to = '/create-admin'>
-              <button type='button' className='btn btn-success' onClick={() => handleAddAdmin()}>
-              Add New Admin
-              </button>
-              </Link>
+              
             </ul>
           </div>
           <Link to = '/'>
-            <button type='button' className='btn btn-danger' id='sidebarCollapse'>
+            <button type='button' className='btn btn-danger' id='sidebarCollapse' onClick={handleLogout}>
               Logout
             </button>
           </Link>
         </div>
       </div>
-      <div id="content" className="container-fluid">
+
+      <div style={{marginTop:'10px', marginBottom:'0px', marginLeft:'10px'}}>
+      <Link to = '/create-admin'>
+              <button type='button' className='btn btn-success'>
+              Add New Admin
+              </button>
+              </Link>
+      </div>
+      <div id="content" className="container-fluid" style={{marginTop:'-30px'}}>
         <table className="table mt-5">
           <thead>
             <tr>

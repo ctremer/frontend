@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import uxImage from './jobs_images/ux.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
+import ReactMarkdown from 'react-markdown';
 
 const navbar = [
   { title: "Dashboard", url: "user-dashboard" },
@@ -18,6 +19,16 @@ const UserDashboard = () => {
   const [showAllScholarships, setShowAllScholarships] = useState(false);
   const [displayedJobs, setDisplayedJobs] = useState([]);
   const [displayedScholarships, setDisplayedScholarships] = useState([]);
+  const navigate = useNavigate();
+
+  const auth = localStorage.getItem('auth');
+
+    useEffect(() => {
+      if (!auth) {
+        return navigate('/login');
+      }
+    });
+    
 
   // Fetch scholarships from the database
   useEffect(() => {
@@ -44,11 +55,11 @@ const UserDashboard = () => {
     return scholarshipsToDisplay.map((scholarship, index) => (
       <div key={index} className='col-md-4 mt-4'>
         <Link to='/scholarship-details' state={{id: scholarship._id, isAdmin: false}} className="btn btn-success mr-2" style={{ borderColor: 'transparent',textDecoration: 'none', backgroundColor: 'transparent'}}>
-          <div className='card' style={{ width: '23rem' }}>
+          <div className='card' style={{ width: '23rem', height:'350px' }}>
             <h5 className='card-img-top' style={{ height: '200px', fontSize: 'clamp(1.5rem, 4vw, 3rem)', backgroundImage: 'linear-gradient(to bottom, #222725, #ACAEAD)', color: 'white', alignContent: 'center' }}>{scholarship.title} </h5>
-            <div className='card-body'>
+            <div className='card-body' style={{maxHeight: '150px', overflow: 'hidden' }}>
             <h5 className='card-title'> Deadline: {new Date(scholarship.deadline).toLocaleDateString('en-US')}</h5>
-              <p style={{ fontSize: '16px' }}>{scholarship.description}</p>
+              <ReactMarkdown>{scholarship.description}</ReactMarkdown>
             </div>
           </div>
         </Link>
@@ -63,11 +74,11 @@ const UserDashboard = () => {
     return jobsToDisplay.map((job, index) => (
       <div className='col-md-4' key={index}>
         <Link to='/job-details' state={{id: job._id}} className="btn btn-success mr-2" style={{ borderColor: 'transparent',textDecoration: 'none', backgroundColor: 'transparent'}}>
-          <div className='card' style={{ width: '23rem', cursor: 'pointer' }}>
+          <div className='card' style={{ width: '23rem', cursor: 'pointer', height:'350px' }}>
             <h5 className='card-img-top' style={{ alignContent: 'center', height: '200px', fontSize: 'clamp(1.5rem, 4vw, 3rem)', backgroundImage: 'linear-gradient(to bottom, #222725, #ACAEAD)', color: 'white' }}>{job.title} </h5>
-            <div className='card-body'>
+            <div className='card-body' style={{maxHeight: '150px', overflow: 'hidden' }}>
               <h5 className='card-title'>{job.employer}</h5>
-              <p style={{ fontSize: '16px' }}>{job.description}</p>
+              <ReactMarkdown>{job.description}</ReactMarkdown>
             </div>
           </div>
         </Link>
@@ -95,6 +106,11 @@ const UserDashboard = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('auth');
+  }
+  
+
   return (
     <div>
       <div className='bg-dark text-white'>
@@ -116,7 +132,7 @@ const UserDashboard = () => {
             </ul>
           </div>
           <Link to='/'>
-            <button type='button' className='btn btn-danger' id='sidebarCollapse'>
+            <button type='button' className='btn btn-danger' id='sidebarCollapse' onClick={handleLogout}>
               Logout
             </button>
           </Link>

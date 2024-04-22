@@ -16,6 +16,7 @@ const Profile = () => {
   const [profile, setProfile] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [bioEditMode, setBioEditMode] = useState(false);
+  const [gpa, setGpa] = useState('');
   const [editedValue, setEditedValue] = useState('');
   const [editedIndex, setEditedIndex] = useState(null);
   const [editedField, setEditedField] = useState('');
@@ -29,6 +30,14 @@ const Profile = () => {
   const [profilePicture, setProfilePicture] = useState(null);
   const navigate = useNavigate();
   const id = localStorage.getItem('_id');
+
+  const auth = localStorage.getItem('auth');
+
+  useEffect(() => {
+    if (!auth) {
+      return navigate('/login');
+    }
+  });
   
   useEffect(() => {
     setEditedValue(profile.bio || ''); // Use an empty string as the default value if profile.bio is undefined
@@ -249,6 +258,10 @@ const Profile = () => {
     setNewSkill('');
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('auth');
+  }
+
   return (
     <>
       <div className='bg-dark text-white'>
@@ -270,7 +283,7 @@ const Profile = () => {
             </ul>
           </div>
           <Link to='/'>
-            <button type='button' className='btn btn-danger' id='sidebarCollapse'>
+            <button type='button' className='btn btn-danger' id='sidebarCollapse' onClick={handleLogout}>
               Logout
             </button>
           </Link>

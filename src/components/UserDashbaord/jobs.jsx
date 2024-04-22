@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../assets/Style/styles.css';
 import projectImage from './jobs_images/project.png';
+import ReactMarkdown from 'react-markdown';
 
 const navbarItems = [
   { title: 'Dashboard', url: 'user-dashboard' },
@@ -19,6 +20,16 @@ const JobsPage = () => {
   const [selectedJobTypeFilter, setSelectedJobTypeFilter] = useState('');
   const [selectedPayTypeFilter, setSelectedPayTypeFilter] = useState('');
   const [selectedRemoteFilter, setSelectedRemoteFilter] = useState('');
+
+  const navigate = useNavigate();
+
+  const auth = localStorage.getItem('auth');
+
+  useEffect(() => {
+    if (!auth) {
+      return navigate('/login');
+    }
+  });
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -86,10 +97,13 @@ const JobsPage = () => {
     setFilterOpen(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('auth');
+  }
+
   return (
     <>
-      <div className="wrapper">
-        <div className='bg-dark text-white' style={{ position: 'fixed', width: '100%'}}>
+        <div className='bg-dark text-white' style={{ width: '100%', zIndex: '1000'}}>
           <div id='navbar' style={{ display: 'flex', paddingBlock: '.5em', justifyContent: 'space-between', alignItems: 'center'}}>
             <h2 style={{ marginInline: '1em', color: 'white', textDecoration: 'none' }}>
               <Link to="/user-dashboard" style={{ color: 'white', textDecoration: 'none' }}>ED OP</Link>
@@ -104,7 +118,7 @@ const JobsPage = () => {
               ))}
             </ul>
             <Link to = '/' style={{ marginLeft: 'auto' }}>
-          <button type='button' className='btn btn-danger' id='sidebarCollapse'>
+          <button type='button' className='btn btn-danger' id='sidebarCollapse' onClick={handleLogout}>
             Logout
           </button>
           </Link>
@@ -212,11 +226,11 @@ const JobsPage = () => {
               {filteredJobs.map((job) => (
                 <div className='col-md-4' key={job._id}>
                   <Link to='/job-details' state={{id: job._id}} className="btn btn-success mr-2" style={{ borderColor: 'transparent',textDecoration: 'none', backgroundColor: 'transparent'}}>
-                    <div className='card' style={{ width: '23rem', cursor: 'pointer' }}>
+                    <div className='card' style={{ width: '23rem', cursor: 'pointer', height: '350px' }}>
                       <h5 className='card-img-top' style={{ alignContent: 'center', height: '200px', fontSize: 'clamp(1.5rem, 4vw, 3rem)', backgroundImage: 'linear-gradient(to bottom, #222725, #ACAEAD)', color: 'white' }}>{job.title} </h5>
-                      <div className='card-body'>
+                      <div className='card-body' style={{maxHeight: '150px', overflow: 'hidden' }}>
                         <h5 className='card-title'>{job.employer}</h5>
-                        <p style={{ fontSize: '16px' }}>{job.description}</p>
+                        <ReactMarkdown>{job.description}</ReactMarkdown>
                       </div>
                     </div>
                   </Link>
@@ -226,7 +240,6 @@ const JobsPage = () => {
             </div>
           </div>
         </div>
-      </div>
     </>
   );
 };

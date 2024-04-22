@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const ScholarshipEssay = () => {
@@ -14,6 +14,14 @@ const ScholarshipEssay = () => {
     const location = useLocation();
     const schol = location.state;
     const userID = localStorage.getItem('_id');
+
+    const auth = localStorage.getItem('auth');
+
+    useEffect(() => {
+      if (!auth) {
+        return navigate('/login');
+      }
+    });
 
     const handleSubmit = async() => {
         const updatedSchol = { ...schol };
@@ -39,6 +47,14 @@ const ScholarshipEssay = () => {
       setFormData(event.target.value);
     };
 
+    const handleLogout = () => {
+      localStorage.removeItem('auth');
+    }
+
+    const goBack = () => {
+      navigate(-1);
+    };
+
     return (
         <>
         <div className='bg-dark text-white'>
@@ -60,7 +76,7 @@ const ScholarshipEssay = () => {
             </ul>
           </div>
           <Link to='/'>
-            <button type='button' className='btn btn-danger' id='sidebarCollapse'>
+            <button type='button' className='btn btn-danger' id='sidebarCollapse' onClick={handleLogout}>
               Logout
             </button>
           </Link>
@@ -75,6 +91,9 @@ const ScholarshipEssay = () => {
                 </div>
             </form>
             <button type="button" className="btn btn-primary" onClick={handleSubmit} style={{marginTop: '10px'}}>Submit</button>
+            <button onClick={goBack} className="btn btn-secondary" style = {{marginLeft: '5px', marginTop: '10px'}}>
+                    Back
+                </button>
         </div>
         </>
     );

@@ -30,6 +30,7 @@ const Login = () => {
         console.log('user', user)//comment
         
         localStorage.setItem('_id', user);
+        localStorage.setItem('auth', true);
         // Check the role and navigate accordingly
         if (responseBody.role === 'admin') {
           navigate('/admin-dashboard');
