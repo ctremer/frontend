@@ -16,10 +16,16 @@ const Home = () => {
       <p style={{ marginTop: '20px' }}>
         Connecting students with education-based opportunities like scholarships or student-employment positions.
       </p>
-      <div style={{ marginTop: '20px' }}>
-        <video width="100%" controls>
-          <source src="" type="video/mp4" />
-        </video>
+      <div style = {{ marginTop: '20px'}}>
+      <iframe
+        width="560"
+        height="315"
+        src="https://www.youtube.com/embed/P-dTGtRSI9w"
+        title="YouTube video player"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      ></iframe>
       </div>
       <div>
         <h3>ED OP Online was created to give students the ability to easily navigate
